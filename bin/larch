@@ -42,6 +42,7 @@ EOS
     opt :ssl_certs,        "Path to a trusted certificate bundle to use to verify server SSL certificates", :short => :none, :type => :string
     opt :ssl_verify,       "Verify server SSL certificates", :short => :none
     opt :verbosity,        "Output verbosity: debug, info, warn, error, or fatal", :short => '-V', :default => 'info'
+    opt :unread,           "Copy only unread/unseen message from source folder", :short => '-u'
   end
 
   # Validate command-line options.
@@ -117,7 +118,8 @@ EOS
       :fast_scan   => options[:fast_scan],
       :max_retries => options[:max_retries],
       :ssl_certs   => options[:ssl_certs] || nil,
-      :ssl_verify  => options[:ssl_verify]
+      :ssl_verify  => options[:ssl_verify],
+      :unread      => options[:unread]
   )
 
   imap_to = Larch::IMAP.new(uri_to,
@@ -126,7 +128,8 @@ EOS
       :fast_scan      => options[:fast_scan],
       :max_retries    => options[:max_retries],
       :ssl_certs      => options[:ssl_certs] || nil,
-      :ssl_verify     => options[:ssl_verify]
+      :ssl_verify     => options[:ssl_verify],
+      :unread         => nil
   )
 
   unless RUBY_PLATFORM =~ /mswin|mingw|bccwin|wince|java/

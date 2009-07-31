@@ -142,7 +142,14 @@ class Mailbox
       "(UID BODY.PEEK[HEADER.FIELDS (MESSAGE-ID)] RFC822.SIZE INTERNALDATE)"
     end
 
-    imap_fetch(range.begin..-1, fields).each do |data|
+    ids_set = unless @imap.options[:unread]
+      range.begin..-1
+    else
+      flag = "UNSEEN"
+      @imap.conn.search([flag]) # return an array of unseen ids
+    end
+
+    imap_fetch(ids_set, fields).each do |data|
       id = create_id(data)
 
       unless uid = data.attr['UID']
